@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async"; // Import Helmet and HelmetProvider
-import Login from "./Components/Login";
-import Register from "./Components/Register";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import UploadFile from "./components/UplodeFile";
 import FileList from "./components/Filelist";
 import FileView from "./components/FileView";
