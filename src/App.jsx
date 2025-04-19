@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async"; // Import Helmet and HelmetProvider
+
 import Login from "./components/Login";
 import Register from "./components/Register";
-import UploadFile from "./components/UplodeFile";
-import FileList from "./components/Filelist";
+import UploadFile from "./components/UploadFile";
+import FileList from "./components/FileList";
 import FileView from "./components/FileView";
 import ProfilePage from "./components/ProfilePage";
 import ProfileEditPage from "./components/ProfileEditPage";
@@ -13,8 +14,6 @@ import AllUsers from "./components/AllUsers";
 import UserProfile from "./UserProfile";
 import Navbar from "./Navbar";
 import Home from "./components/Home";
-
-<Home />;
 
 const App = () => {
   return (
