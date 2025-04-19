@@ -8,8 +8,12 @@ const highlightText = (text, query) => {
   const regex = new RegExp(`(${query})`, "gi");
   return text.split(regex).map((part, index) =>
     regex.test(part) ? (
-      <span key={index} className="bg-yellow-200">{part}</span>
-    ) : part
+      <span key={index} className="bg-yellow-200">
+        {part}
+      </span>
+    ) : (
+      part
+    )
   );
 };
 
@@ -27,32 +31,48 @@ const getDateRange = (filter) => {
       startDate = endDate = now.toISOString().split("T")[0];
       break;
     case "This Week":
-      const firstDayOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+      const firstDayOfWeek = new Date(
+        now.setDate(now.getDate() - now.getDay())
+      );
       startDate = firstDayOfWeek.toISOString().split("T")[0];
-      endDate = new Date(firstDayOfWeek.setDate(firstDayOfWeek.getDate() + 6)).toISOString().split("T")[0];
+      endDate = new Date(firstDayOfWeek.setDate(firstDayOfWeek.getDate() + 6))
+        .toISOString()
+        .split("T")[0];
       break;
     case "Last Week":
-      const lastWeekStart = new Date(now.setDate(now.getDate() - now.getDay() - 7));
+      const lastWeekStart = new Date(
+        now.setDate(now.getDate() - now.getDay() - 7)
+      );
       startDate = lastWeekStart.toISOString().split("T")[0];
-      endDate = new Date(lastWeekStart.setDate(lastWeekStart.getDate() + 6)).toISOString().split("T")[0];
+      endDate = new Date(lastWeekStart.setDate(lastWeekStart.getDate() + 6))
+        .toISOString()
+        .split("T")[0];
       break;
     case "This Month":
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       startDate = startOfMonth.toISOString().split("T")[0];
-      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+        .toISOString()
+        .split("T")[0];
       break;
     case "Last Month":
       const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
       startDate = lastMonthStart.toISOString().split("T")[0];
-      endDate = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().split("T")[0];
+      endDate = new Date(now.getFullYear(), now.getMonth(), 0)
+        .toISOString()
+        .split("T")[0];
       break;
     case "This Year":
       startDate = new Date(now.getFullYear(), 0, 1).toISOString().split("T")[0];
       endDate = new Date(now.getFullYear(), 11, 31).toISOString().split("T")[0];
       break;
     case "Last Year":
-      startDate = new Date(now.getFullYear() - 1, 0, 1).toISOString().split("T")[0];
-      endDate = new Date(now.getFullYear() - 1, 11, 31).toISOString().split("T")[0];
+      startDate = new Date(now.getFullYear() - 1, 0, 1)
+        .toISOString()
+        .split("T")[0];
+      endDate = new Date(now.getFullYear() - 1, 11, 31)
+        .toISOString()
+        .split("T")[0];
       break;
     case "All":
     default:
@@ -96,7 +116,7 @@ const FileList = () => {
     let charIndex = 0;
     let wordIndex = animationIndex;
     let isErasing = false;
-  
+
     const type = () => {
       const currentWord = textArray[wordIndex];
       if (!isErasing) {
@@ -104,7 +124,7 @@ const FileList = () => {
         const nextText = currentWord.slice(0, charIndex + 1);
         setAnimationText(nextText);
         charIndex++;
-  
+
         if (nextText === currentWord) {
           isErasing = true;
           setTimeout(type, 1000); // pause before erasing
@@ -115,22 +135,22 @@ const FileList = () => {
         const nextText = currentWord.slice(0, charIndex - 1);
         setAnimationText(nextText);
         charIndex--;
-  
+
         if (charIndex === 0) {
           isErasing = false;
           wordIndex = (wordIndex + 1) % textArray.length;
           setAnimationIndex(wordIndex);
         }
       }
-  
+
       setTimeout(type, 150); // typing speed
     };
-  
+
     const typingTimeout = setTimeout(type, 150);
-  
+
     return () => clearTimeout(typingTimeout);
   }, [animationIndex]);
-  
+
   const filterFilesByDate = (startDate, endDate) => {
     if (filter === "All") {
       setFilteredFiles(files);
@@ -154,11 +174,12 @@ const FileList = () => {
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
     if (event.target.value) {
-      const filtered = filteredFiles.filter((file) =>
-        file.title.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        (file.user.firstName + " " + file.user.lastName)
-          .toLowerCase()
-          .includes(event.target.value.toLowerCase())
+      const filtered = filteredFiles.filter(
+        (file) =>
+          file.title.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          (file.user.firstName + " " + file.user.lastName)
+            .toLowerCase()
+            .includes(event.target.value.toLowerCase())
       );
       setFilteredFiles(filtered);
     } else {
@@ -167,25 +188,25 @@ const FileList = () => {
   };
 
   const handlePageChange = (page) => {
-    if (page < 1 || page > totalPages) return;  // Prevent going out of bounds
+    if (page < 1 || page > totalPages) return; // Prevent going out of bounds
     setCurrentPage(page);
   };
-  
+
   // Calculate the index for the first and last file on the current page
   const indexOfLastFile = currentPage * pageSize;
   const indexOfFirstFile = indexOfLastFile - pageSize;
   const currentFiles = filteredFiles.slice(indexOfFirstFile, indexOfLastFile);
-  
+
   // Calculate total pages based on filtered files length
   const totalPages = Math.ceil(filteredFiles.length / pageSize);
-  
+
   return (
     <div className="min-h-screen w-full bg-gray-100 flex flex-col items-center p-6">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full bg-white p-4">
         <h2 className="text-2xl font-bold text-gray-700 text-center mb-6">
           Uploaded Files
         </h2>
-  
+
         {/* Search Input Field */}
         <div className="mb-4">
           <input
@@ -196,7 +217,7 @@ const FileList = () => {
             className="p-2 w-full border border-gray-300 rounded-md"
           />
         </div>
-  
+
         {/* Filter Dropdown */}
         <div className="mb-4">
           <select
@@ -215,7 +236,7 @@ const FileList = () => {
             <option value="Last Year">Last Year</option>
           </select>
         </div>
-  
+
         {loading ? (
           <p className="text-center text-gray-500">Loading files...</p>
         ) : currentFiles.length > 0 ? (
@@ -243,7 +264,12 @@ const FileList = () => {
                     {highlightText(file.title, searchQuery)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {highlightText(file.user.firstName + " " + file.user.lastName, searchQuery)}
+                    {file.user
+                      ? highlightText(
+                          file.user.firstName + " " + file.user.lastName,
+                          searchQuery
+                        )
+                      : "Unknown User"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {file.createdDate
@@ -265,7 +291,7 @@ const FileList = () => {
         ) : (
           <p className="text-center text-gray-500">No files found.</p>
         )}
-  
+
         {/* Pagination Controls */}
         <div className="flex justify-center mt-4">
           <button
@@ -287,7 +313,6 @@ const FileList = () => {
       </div>
     </div>
   );
-   
 };
 
 export default FileList;

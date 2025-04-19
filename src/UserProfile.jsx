@@ -39,7 +39,9 @@ export default function UserProfile() {
 
   const handleDownload = async (fileId) => {
     try {
-      const response = await fetch(`http://localhost:8080/files/download/${fileId}`);
+      const response = await fetch(
+        `http://localhost:8080/files/download/${fileId}`
+      );
       if (!response.ok) throw new Error("Failed to download file");
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -63,10 +65,17 @@ export default function UserProfile() {
       ) : (
         <div className="w-full max-w-lg bg-white shadow-lg rounded-2xl p-6 mb-8 text-center">
           <div className="w-24 h-24 bg-blue-100 text-blue-500 flex items-center justify-center rounded-full text-3xl font-bold mx-auto mb-4">
-            {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+            {user && user.firstName ? user.firstName.charAt(0) : ""}
+            {user && user.lastName ? user.lastName.charAt(0) : ""}
           </div>
-          <h2 className="text-2xl font-semibold text-gray-800">{user.firstName} {user.lastName}</h2>
-          <p className="text-gray-500">{user.email}</p>
+          <h2 className="text-2xl font-semibold text-gray-800">
+            {user && user.firstName
+              ? `${user.firstName} ${user.lastName}`
+              : "Unknown User"}
+          </h2>
+          <p className="text-gray-500">
+            {user && user.email ? user.email : "No email available"}
+          </p>
         </div>
       )}
 
@@ -74,17 +83,24 @@ export default function UserProfile() {
       <div className="w-full max-w-2xl">
         {files.length > 0 ? (
           files.map((file) => (
-            <div key={file.id} className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center">
+            <div
+              key={file.id}
+              className="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center"
+            >
               <div>
                 <h4 className="font-medium">{file.title}</h4>
-                <p className="text-gray-500 text-sm">{user.firstName} {user.lastName}</p>
+                <p className="text-gray-500 text-sm">
+                  {user && user.firstName
+                    ? `${user.firstName} ${user.lastName}`
+                    : "Unknown User"}
+                </p>
               </div>
               <Link
-                      to={`/file/${file.id}/${file.title}`}
-                      className="font-medium text-blue-600 "
-                    >
-                      View
-                    </Link>
+                to={`/file/${file.id}/${file.title}`}
+                className="font-medium text-blue-600 "
+              >
+                View
+              </Link>
             </div>
           ))
         ) : (

@@ -72,7 +72,9 @@ const Home = () => {
                     <div className="flex flex-col items-center">
                       <Link to={`/users/${user.id}`}>
                         <div className="text-base text-nowrap font-semibold">
-                          {user.firstName} {user.lastName}
+                          {user && user.firstName
+                            ? `${user.firstName} ${user.lastName}`
+                            : "Unknown User"}
                         </div>
                       </Link>
                     </div>
@@ -84,7 +86,9 @@ const Home = () => {
 
           {/* Last 10 Uploaded Files */}
           <div className="mb-10">
-            <h2 className="text-3xl font-semibold mb-6">Latest Uploaded Files</h2>
+            <h2 className="text-3xl font-semibold mb-6">
+              Latest Uploaded Files
+            </h2>
             {loadingFiles ? (
               <p className="text-gray-300">Loading files...</p>
             ) : (
@@ -114,7 +118,9 @@ const Home = () => {
                         </td>
                         <td className="px-6 py-4">{file.title}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {file.user.firstName} {file.user.lastName}
+                          {file.user
+                            ? `${file.user.firstName} ${file.user.lastName}`
+                            : "Unknown User"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {file.createdDate
