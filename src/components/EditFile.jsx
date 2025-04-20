@@ -82,7 +82,13 @@ const EditFile = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Update File
+          </button>
           <div>
             <label className="block font-medium">Title</label>
             <input
@@ -104,12 +110,7 @@ const EditFile = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-          >
-            Update File
-          </button>
+          
         </form>
       )}
     </div>
