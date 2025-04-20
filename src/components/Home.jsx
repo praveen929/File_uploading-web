@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie"; // Import the js-cookie library
 
 const Home = () => {
+  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [users, setUsers] = useState([]);
   const [loadingFiles, setLoadingFiles] = useState(true);
@@ -111,7 +112,10 @@ const Home = () => {
                     {files.map((file, index) => (
                       <tr
                         key={file.id}
-                        className="bg-white border-b border-gray-200 hover:bg-gray-50"
+                        className="bg-white border-b cursor-pointer border-gray-200 hover:bg-gray-50"
+                        onClick={() =>
+                          navigate(`/file/${file.id}/${file.title}`)
+                        }
                       >
                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                           {index + 1}

@@ -82,8 +82,8 @@ const EditFile = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <button
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
           >
@@ -109,8 +109,6 @@ const EditFile = () => {
               style={{ height: "600px", overflowY: "auto" }}
             />
           </div>
-
-          
         </form>
       )}
     </div>
