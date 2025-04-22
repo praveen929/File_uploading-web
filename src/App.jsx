@@ -2,18 +2,23 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async"; // Import Helmet and HelmetProvider
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import UploadFile from "./components/UploadFile";
-import FileList from "./components/FileList";
-import FileView from "./components/FileView";
-import ProfilePage from "./components/ProfilePage";
-import ProfileEditPage from "./components/ProfileEditPage";
-import EditFile from "./components/EditFile";
-import AllUsers from "./components/AllUsers";
-import UserProfile from "./UserProfile";
-import Navbar from "./Navbar";
-import Home from "./components/Home";
+// Page imports
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import UploadFile from "./pages/UploadFile";
+import FileList from "./pages/FileList";
+import FileView from "./pages/FileView";
+import ProfilePage from "./pages/ProfilePage";
+import ProfileEditPage from "./pages/ProfileEditPage";
+import EditFile from "./pages/EditFile";
+import AllUsers from "./pages/AllUsers";
+import Home from "./pages/Home";
+
+// Component imports
+import UserProfile from "./components/UserProfile";
+
+// Layout imports
+import Navbar from "./layouts/Navbar";
 
 const App = () => {
   return (
