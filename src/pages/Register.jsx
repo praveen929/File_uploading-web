@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { registerUser, isAuthenticated } from "../utils/auth";
 
 export default function Register() {
   const [firstName, setFirstName] = useState("");
@@ -13,6 +13,13 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // Check if user is already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const handleRegister = async () => {
     setError(""); // Reset the error message before attempting registration
 
@@ -22,31 +29,33 @@ export default function Register() {
       return; // Prevent registration if any field is empty
     }
 
-    try {
-      const response = await fetch("http://localhost:8080/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, email, password, gender }),
-      });
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
 
-      if (!response.ok) {
-        // Check if the response indicates a user already exists (e.g., 409 status code)
-        if (response.status === 409) {
-          throw new Error("User already exists. Please try logging in.");
-        }
-        throw new Error("Registration failed. Please try again.");
-      }
+    // Validate password strength
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
 
-      const data = await response.json();
-      console.log("Registration successful", data);
+    // Use the registerUser utility function
+    const result = await registerUser({
+      firstName,
+      lastName,
+      email,
+      password,
+      gender,
+    });
 
-      // Save userId in cookies
-      Cookies.set("userId", data.userId, { expires: 7 });
-
+    if (result.success) {
       alert("Registration Successful");
       navigate("/"); // Redirect after successful registration
-    } catch (error) {
-      setError(error.message); // Display the error message
+    } else {
+      setError(result.error);
     }
   };
 

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { loginUser, isAuthenticated } from "../utils/auth";
 
 export default function Login() {
   const [password, setPassword] = useState("");
@@ -11,42 +11,26 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  // Check if user is already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent form submit default behavior
 
     setError("");
-    try {
-      const response = await fetch(
-        `http://localhost:8080/users/login?email=${email}&password=${password}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
 
-      if (response.status === 401) {
-        throw new Error("Invalid email or password");
-      }
+    // Use the loginUser utility function
+    const result = await loginUser(email, password);
 
-      if (!response.ok) {
-        throw new Error("Something went wrong. Please try again.");
-      }
-
-      const data = await response.json();
-
-      if (!data.userId) {
-        throw new Error("User ID is missing in response.");
-      }
-
-      // Save userId in cookies
-      Cookies.set("userId", data.userId, { expires: 1 });
-
+    if (result.success) {
       alert("Login Successful");
       navigate("/"); // Navigate to home page after login
-    } catch (error) {
-      console.error(error.message);
-      setError(error.message);
+    } else {
+      setError(result.error);
     }
   };
 

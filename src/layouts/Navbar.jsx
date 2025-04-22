@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { getCurrentUserId, fetchCurrentUser, logoutUser } from "../utils/auth";
 import { styles } from "../utils/styles";
 
 export default function Navbar() {
@@ -12,30 +12,34 @@ export default function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Get the userId from cookies
-  const userId = Cookies.get("userId");
+  // Get the userId using our auth utility
+  const userId = getCurrentUserId();
 
   // Fetch user data from API based on userId
   useEffect(() => {
-    if (userId) {
-      // Fetch user data from the server
-      fetch(`http://localhost:8080/users/${userId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setUserData(data); // Store user data in state
-        })
-        .catch((error) => {
+    const loadUserData = async () => {
+      if (userId) {
+        try {
+          // Use our fetchCurrentUser utility
+          const userData = await fetchCurrentUser();
+          if (userData) {
+            setUserData(userData);
+          }
+        } catch (error) {
           console.error("Error fetching user data:", error);
-        });
-    }
+        }
+      }
 
-    if (
-      !userId &&
-      window.location.pathname !== "/login" &&
-      window.location.pathname !== "/register"
-    ) {
-      navigate("/login"); // Redirect to login page if userId doesn't exist
-    }
+      if (
+        !userId &&
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register"
+      ) {
+        navigate("/login"); // Redirect to login page if userId doesn't exist
+      }
+    };
+
+    loadUserData();
   }, [userId, navigate]);
 
   // Extract initials from the user's name
@@ -45,9 +49,9 @@ export default function Navbar() {
     return `${firstInitial}${lastInitial}`;
   };
 
-  // Logout function to remove userId from cookies and redirect to login page
+  // Logout function using our auth utility
   const handleLogout = () => {
-    Cookies.remove("userId"); // Remove the userId cookie
+    logoutUser(); // Use our logoutUser utility
     navigate("/login"); // Redirect to login page after logout
   };
 
