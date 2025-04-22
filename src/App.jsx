@@ -1,45 +1,33 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Helmet, HelmetProvider } from "react-helmet-async"; // Import Helmet and HelmetProvider
 
-// Modern Page imports
-import ModernHome from "./pages/ModernHome";
-import ModernLogin from "./pages/ModernLogin";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import UploadFile from "./components/UplodeFile";
+import FileList from "./components/FileList";
+import FileView from "./components/FileView";
+import ProfilePage from "./components/ProfilePage";
+import ProfileEditPage from "./components/ProfileEditPage";
+import EditFile from "./components/EditFile";
+import AllUsers from "./components/AllUsers";
+import UserProfile from "./UserProfile";
+import Navbar from "./Navbar";
+import Home from "./components/Home";
 
-// Original Page imports
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import UploadFile from "./pages/UploadFile";
-import FileList from "./pages/FileList";
-import FileView from "./pages/FileView";
-import ProfilePage from "./pages/ProfilePage";
-import ProfileEditPage from "./pages/ProfileEditPage";
-import EditFile from "./pages/EditFile";
-import AllUsers from "./pages/AllUsers";
-import Home from "./pages/Home";
-
-// Component imports
-import UserProfile from "./components/UserProfile";
-
-// Layout imports
-import ModernNavbar from "./layouts/ModernNavbar";
-import Navbar from "./layouts/Navbar";
+<Home />;
 
 const App = () => {
-  // Use modern UI by default
-  const useModernUI = true;
-
   return (
     <HelmetProvider>
+      {" "}
+      {/* Wrap the app in HelmetProvider */}
       <Router>
-        <div className="min-h-screen flex flex-col">
-          {useModernUI ? <ModernNavbar /> : <Navbar />}
-          <div className="w-full flex-grow">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+          <Navbar />
+          <div className="w-full max-w-4xl mt-10">
             <Routes>
-              <Route
-                path="/"
-                element={useModernUI ? <ModernHome /> : <Home />}
-              />
+              <Route path="/" element={<Home />} />
               <Route
                 path="/login"
                 element={
@@ -47,7 +35,7 @@ const App = () => {
                     <Helmet>
                       <title>Login - FileHub</title>
                     </Helmet>
-                    {useModernUI ? <ModernLogin /> : <Login />}
+                    <Login />
                   </>
                 }
               />
@@ -152,8 +140,6 @@ const App = () => {
               />
             </Routes>
           </div>
-
-          {/* Footer would go here */}
         </div>
       </Router>
     </HelmetProvider>

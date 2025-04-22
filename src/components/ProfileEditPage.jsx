@@ -81,9 +81,7 @@ const ProfileEditPage = () => {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-gray-700 font-medium">
-                First Name
-              </label>
+              <label className="block text-gray-700 font-medium">First Name</label>
               <input
                 type="text"
                 name="firstName"
@@ -95,9 +93,7 @@ const ProfileEditPage = () => {
             </div>
 
             <div>
-              <label className="block text-gray-700 font-medium">
-                Last Name
-              </label>
+              <label className="block text-gray-700 font-medium">Last Name</label>
               <input
                 type="text"
                 name="lastName"
@@ -121,9 +117,7 @@ const ProfileEditPage = () => {
             </div>
 
             <div className="mb-4 relative">
-              <label className="block text-gray-700 font-medium">
-                Password
-              </label>
+              <label className="block text-gray-700 font-medium">Password</label>
               <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -140,9 +134,7 @@ const ProfileEditPage = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <p className="text-gray-500 text-sm">
-                Leave blank to keep the current password.
-              </p>
+              <p className="text-gray-500 text-sm">Leave blank to keep the current password.</p>
             </div>
 
             <button

@@ -39,8 +39,8 @@ export default function Navbar() {
 
   // Extract initials from the user's name
   const getInitials = (firstName, lastName) => {
-    const firstInitial = firstName ? firstName.charAt(0).toUpperCase() : "";
-    const lastInitial = lastName ? lastName.charAt(0).toUpperCase() : "";
+    const firstInitial = firstName ? firstName.charAt(0).toUpperCase() : '';
+    const lastInitial = lastName ? lastName.charAt(0).toUpperCase() : '';
     return `${firstInitial}${lastInitial}`;
   };
 
@@ -95,7 +95,7 @@ export default function Navbar() {
             <Link to="/upload-file" className="text-blue-600 hover:underline">
               Upload File
             </Link>
-
+           
             <Link to="/allusers" className="text-blue-600 hover:underline">
               All Users
             </Link>
@@ -112,10 +112,7 @@ export default function Navbar() {
 
             {/* Display the user's initials in a circle */}
             {userData && userData.firstName && userData.lastName && (
-              <Link
-                to="/profile"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white text-xl"
-              >
+              <Link to="/profile" className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white text-xl">
                 {getInitials(userData.firstName, userData.lastName)}
               </Link>
             )}
