@@ -1,8 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { Helmet, HelmetProvider } from "react-helmet-async"; // Import Helmet and HelmetProvider
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
-// Page imports
+// Modern Page imports
+import ModernHome from "./pages/ModernHome";
+import ModernLogin from "./pages/ModernLogin";
+
+// Original Page imports
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import UploadFile from "./pages/UploadFile";
@@ -18,19 +22,24 @@ import Home from "./pages/Home";
 import UserProfile from "./components/UserProfile";
 
 // Layout imports
+import ModernNavbar from "./layouts/ModernNavbar";
 import Navbar from "./layouts/Navbar";
 
 const App = () => {
+  // Use modern UI by default
+  const useModernUI = true;
+
   return (
     <HelmetProvider>
-      {" "}
-      {/* Wrap the app in HelmetProvider */}
       <Router>
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-          <Navbar />
-          <div className="w-full max-w-4xl mt-10">
+        <div className="min-h-screen flex flex-col">
+          {useModernUI ? <ModernNavbar /> : <Navbar />}
+          <div className="w-full flex-grow">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route
+                path="/"
+                element={useModernUI ? <ModernHome /> : <Home />}
+              />
               <Route
                 path="/login"
                 element={
@@ -38,7 +47,7 @@ const App = () => {
                     <Helmet>
                       <title>Login - FileHub</title>
                     </Helmet>
-                    <Login />
+                    {useModernUI ? <ModernLogin /> : <Login />}
                   </>
                 }
               />
@@ -143,6 +152,8 @@ const App = () => {
               />
             </Routes>
           </div>
+
+          {/* Footer would go here */}
         </div>
       </Router>
     </HelmetProvider>
