@@ -42,11 +42,12 @@ export default function ModernNavbar() {
         }
       }
 
-      if (
-        !userId &&
-        window.location.pathname !== "/login" &&
-        window.location.pathname !== "/register"
-      ) {
+      // Only redirect if not on login or register page
+      const currentPath = window.location.pathname;
+      const authPaths = ["/login", "/register"];
+
+      if (!userId && !authPaths.includes(currentPath)) {
+        console.log("No user ID found, redirecting to login");
         navigate("/login");
       }
     };

@@ -23,13 +23,23 @@ export default function Login() {
 
     setError("");
 
+    if (!email || !password) {
+      setError("Email and password are required");
+      return;
+    }
+
     // Use the loginUser utility function
     const result = await loginUser(email, password);
 
     if (result.success) {
+      console.log(
+        "Login successful, user ID:",
+        result.data.id || result.data.userId
+      );
       alert("Login Successful");
       navigate("/"); // Navigate to home page after login
     } else {
+      console.error("Login failed:", result.error);
       setError(result.error);
     }
   };
