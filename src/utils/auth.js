@@ -2,6 +2,7 @@
  * Authentication utilities for the application
  */
 import { getCookie, setCookie, removeCookie, hasCookie } from "./cookies";
+import { API_ENDPOINTS } from "./config";
 
 // Constants
 export const USER_ID_COOKIE = "userId";
@@ -69,13 +70,32 @@ export const fetchCurrentUser = async () => {
 
   try {
     console.log(`Fetching user data for ID: ${userId}`);
-    const response = await fetch(`http://localhost:8080/users/${userId}`);
+    const response = await fetch(API_ENDPOINTS.GET_USER(userId));
+
+    // Handle non-JSON responses
+    let userData;
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      userData = await response.json();
+      console.log("User data response:", userData);
+    } else {
+      const text = await response.text();
+      console.log("User data response (text):", text);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user: ${response.status} - ${text}`);
+      }
+      return null;
+    }
 
     if (!response.ok) {
       throw new Error(`Failed to fetch user: ${response.status}`);
     }
 
-    const userData = await response.json();
+    // Validate user data
+    if (!userData || !userData.id) {
+      console.warn("User data missing ID:", userData);
+    }
+
     console.log("User data fetched successfully");
     return userData;
   } catch (error) {
@@ -94,7 +114,7 @@ export const loginUser = async (email, password) => {
   try {
     console.log(`Attempting login for email: ${email}`);
 
-    const response = await fetch("http://localhost:8080/users/login", {
+    const response = await fetch(API_ENDPOINTS.LOGIN, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -102,8 +122,17 @@ export const loginUser = async (email, password) => {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
-    console.log("Login response:", data);
+    // Handle non-JSON responses
+    let data;
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+      console.log("Login response:", data);
+    } else {
+      const text = await response.text();
+      console.log("Login response (text):", text);
+      data = { message: text };
+    }
 
     if (!response.ok) {
       console.error("Login failed with status:", response.status);
@@ -114,7 +143,8 @@ export const loginUser = async (email, password) => {
     }
 
     // Check if the response contains a user ID
-    const userId = data.id || data.userId;
+    // Backend returns userId, not id
+    const userId = data.userId || data.id;
     if (!userId) {
       console.error("Login response missing user ID:", data);
       return {
@@ -156,7 +186,9 @@ export const loginUser = async (email, password) => {
  */
 export const registerUser = async (userData) => {
   try {
-    const response = await fetch("http://localhost:8080/users/register", {
+    console.log("Registering user with data:", userData);
+
+    const response = await fetch(API_ENDPOINTS.REGISTER, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -164,17 +196,29 @@ export const registerUser = async (userData) => {
       body: JSON.stringify(userData),
     });
 
-    const data = await response.json();
+    // Handle non-JSON responses
+    let data;
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+      console.log("Registration response:", data);
+    } else {
+      const text = await response.text();
+      console.log("Registration response (text):", text);
+      data = { message: text };
+    }
 
     if (!response.ok) {
       // Check if the response indicates a user already exists
       if (response.status === 409) {
+        console.error("User already exists");
         return {
           success: false,
           error: "User already exists. Please try logging in.",
         };
       }
 
+      console.error("Registration failed with status:", response.status);
       return {
         success: false,
         error: data.message || "Registration failed. Please try again.",
@@ -182,24 +226,29 @@ export const registerUser = async (userData) => {
     }
 
     // Check if the response contains a user ID
-    if (!data.id && !data.userId) {
+    // Backend returns userId, not id
+    const userId = data.userId || data.id;
+    if (!userId) {
+      console.error("Registration response missing user ID:", data);
       return {
         success: false,
         error: "User ID is missing in response",
       };
     }
 
+    console.log(`Setting user ID cookie: ${userId}`);
     // Set the user ID in cookies
-    const userId = data.id || data.userId;
     const cookieSet = setCurrentUserId(userId);
 
     if (!cookieSet) {
+      console.error("Failed to set user ID cookie");
       return {
         success: false,
         error: "Failed to set user ID cookie",
       };
     }
 
+    console.log("Registration successful");
     return {
       success: true,
       data,

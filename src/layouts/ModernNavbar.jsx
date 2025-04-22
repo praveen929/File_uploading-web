@@ -35,7 +35,23 @@ export default function ModernNavbar() {
           // Use our fetchCurrentUser utility
           const userData = await fetchCurrentUser();
           if (userData) {
+            console.log("Setting user data:", userData);
             setUserData(userData);
+          } else {
+            console.warn(
+              "fetchCurrentUser returned null despite having userId"
+            );
+            // If we have a userId but can't fetch the user data, the userId might be invalid
+            // Clear it and redirect to login
+            if (
+              window.location.pathname !== "/login" &&
+              window.location.pathname !== "/register"
+            ) {
+              console.log("Invalid user ID, redirecting to login");
+              logoutUser(); // Clear the invalid userId
+              navigate("/login");
+              return;
+            }
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
