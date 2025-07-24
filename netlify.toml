@@ -1,0 +1,36 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# Handle client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Specific redirects for common routes
+[[redirects]]
+  from = "/users/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/file-view/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/profile/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+
+[build.environment]
+  NODE_VERSION = "18"

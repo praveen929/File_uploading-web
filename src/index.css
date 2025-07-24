@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+/* CSS Variables for theme */
+:root {
+  --bg-primary: 249 250 251; /* gray-50 */
+  --bg-secondary: 255 255 255; /* white */
+  --bg-tertiary: 243 244 246; /* gray-100 */
+  --text-primary: 17 24 39; /* gray-900 */
+  --text-secondary: 75 85 99; /* gray-600 */
+  --border-primary: 229 231 235; /* gray-200 */
+}
+
+.dark {
+  --bg-primary: 17 24 39; /* gray-900 */
+  --bg-secondary: 31 41 55; /* gray-800 */
+  --bg-tertiary: 55 65 81; /* gray-700 */
+  --text-primary: 243 244 246; /* gray-100 */
+  --text-secondary: 156 163 175; /* gray-400 */
+  --border-primary: 75 85 99; /* gray-600 */
+}
+
+/* Responsive YouTube Embed Styles */
+.prose iframe,
+.prose-sm iframe,
+[data-description] iframe,
+.description-content iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16/9 !important;
+}
+
+/* YouTube embed container for better responsiveness */
+.youtube-embed-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.youtube-embed-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
+  border-radius: 8px;
+}
+
+/* Mobile specific iframe styles */
+@media (max-width: 768px) {
+  .prose iframe,
+  .prose-sm iframe,
+  [data-description] iframe,
+  .description-content iframe {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16/9 !important;
+    border-radius: 6px;
+  }
+
+  /* Ensure no horizontal overflow */
+  .prose,
+  .prose-sm,
+  [data-description],
+  .description-content {
+    overflow-x: hidden;
+    word-wrap: break-word;
+    max-width: 100%;
+  }
+
+  /* YouTube embed container mobile adjustments */
+  .youtube-embed-container {
+    padding-bottom: 56.25%; /* Maintain 16:9 aspect ratio */
+    margin: 10px 0;
+  }
+}
+
+/* Additional responsive styles for all screen sizes */
+.description-content,
+.prose,
+.prose-sm {
+  /* Prevent any content from overflowing horizontally */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Ensure all embedded content is responsive */
+.description-content embed,
+.description-content object,
+.description-content video,
+.prose embed,
+.prose object,
+.prose video,
+.prose-sm embed,
+.prose-sm object,
+.prose-sm video {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* JoditEditor specific responsive styles */
+.jodit-wysiwyg {
+  overflow-x: hidden !important;
+}
+
+.jodit-wysiwyg iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16/9 !important;
+}
+
+/* Force apply theme styles with higher specificity */
+body .bg-gray-50,
+.bg-gray-50 {
+  background-color: rgb(var(--bg-primary)) !important;
+}
+
+body .bg-white,
+.bg-white {
+  background-color: rgb(var(--bg-secondary)) !important;
+}
+
+body .bg-gray-100,
+.bg-gray-100 {
+  background-color: rgb(var(--bg-tertiary)) !important;
+}
+
+body .bg-gray-800,
+.bg-gray-800 {
+  background-color: rgb(var(--bg-secondary)) !important;
+}
+
+body .text-gray-900,
+.text-gray-900 {
+  color: rgb(var(--text-primary)) !important;
+}
+
+body .text-gray-600,
+.text-gray-600 {
+  color: rgb(var(--text-secondary)) !important;
+}
+
+body .text-gray-100,
+.text-gray-100 {
+  color: rgb(var(--text-primary)) !important;
+}
+
+body .text-gray-400,
+.text-gray-400 {
+  color: rgb(var(--text-secondary)) !important;
+}
+
+body .border-gray-200,
+.border-gray-200 {
+  border-color: rgb(var(--border-primary)) !important;
+}
+
+body .border-gray-700,
+.border-gray-700 {
+  border-color: rgb(var(--border-primary)) !important;
+}
+
+/* Dark mode support */
+html.dark,
+html[data-theme="dark"] {
+  color-scheme: dark !important;
+}
+
+html.light,
+html[data-theme="light"] {
+  color-scheme: light !important;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Prevent scroll when mobile menu is open */
+.no-scroll {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+}
+
+body.no-scroll {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+html.no-scroll {
+  overflow: hidden !important;
+}
+
+/* Mobile menu enhancement */
+@media (max-width: 768px) {
+  .mobile-menu {
+    background-color: rgb(var(--bg-secondary)) !important;
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-menu-header {
+    background-color: rgb(var(--bg-tertiary)) !important;
+  }
+
+  /* Extra scroll prevention for mobile */
+  body.no-scroll {
+    touch-action: none;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.file-content img,
+.file-content video,
+.file-content iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto; /* Center alignment */
+}
+
+.file-content iframe {
+  width: 100%;
+  height: 400px; /* Adjust height if needed */
+}
