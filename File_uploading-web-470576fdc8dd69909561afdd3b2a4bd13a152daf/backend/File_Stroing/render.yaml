@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: filehub-backend
+    env: java
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -Dspring.profiles.active=production -jar target/File_Stroing-0.0.1-SNAPSHOT.jar
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: FRONTEND_URL
+        value: https://filehuub.netlify.app
+    healthCheckPath: /users

@@ -1,0 +1,14 @@
+# Ignore unnecessary files for deployment
+.git/
+.gitignore
+README.md
+.DS_Store
+node_modules/
+*.log
+.env.local
+.env.development
+.env.test
+.vscode/
+.idea/
+*.iml
+target/test-classes/
